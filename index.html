@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Review System Hub</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .button-group {
+            display: flex;
+            gap: 2rem;
+        }
+        .button-group a {
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            background: #00c6ff;
+            color: #fff;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .button-group a:hover {
+            background: #0072ff;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+<h1>🔍 Welcome to the Review System</h1>
+<div class="button-group">
+    <a href="contractor_customer.html">Contractor & Customer</a>
+    <a href="landlord_tenant.html">Landlord & Tenant</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Reviews</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="modern-layout">
+<header>
+  <h1>Search Reviews</h1>
+  <nav><a href="index.html">Home</a> | <a href="landlord_tenant.html">Leave a Review</a></nav>
+</header>
+
+<main>
+  <div class="form-card">
+    <select id="role">
+      <option value="">Search for a...</option>
+      <option value="landlord">Landlord</option>
+      <option value="tenant">Tenant</option>
+    </select>
+    <input id="searchName" placeholder="Search Name">
+    <button onclick="handleSearch()">Search</button>
+  </div>
+
+  <div id="results" class="review-results"></div>
+</main>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getFirestore, collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCkQZevKbMy_59bCHL8vNa-hiQVMqUUZCc",
+    authDomain: "peoplesearch-7275b.firebaseapp.com",
+    projectId: "peoplesearch-7275b",
+    storageBucket: "peoplesearch-7275b.appspot.com",
+    messagingSenderId: "864963064440",
+    appId: "1:864963064440:web:03f9d767b1da3e9279338d"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.handleSearch = async function () {
+    const role = document.getElementById('role').value;
+    const searchName = document.getElementById('searchName').value.trim().toLowerCase();
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = "";
+
+    if (!searchName || !role) {
+      alert("Please enter a name and select a role.");
+      return;
+    }
+
+    try {
+      const q = query(
+              collection(db, "reviews_re"),  // Ensure this collection matches your reviews
+              where("reviewee", "==", searchName),
+              where("role", "==", role),
+              orderBy("timestamp", "desc"),
+              limit(5)
+      );
+
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        resultsDiv.innerHTML = "<p>No reviews found.</p>";
+        return;
+      }
+
+      querySnapshot.forEach(doc => {
+        const r = doc.data();
+        const div = document.createElement('div');
+        div.className = 'review-card';
+        div.innerHTML = `
+          <h3>${r.reviewer} rated ${r.reviewee} (${r.role})</h3>
+          <p><strong>Rating:</strong> ${r.rating}</p>
+          <p>${r.note}</p>
+          ${r.imageUrl ? `<img src="${r.imageUrl}" alt="Review Image" class="review-image">` : ''}
+        `;
+        resultsDiv.appendChild(div);
+      });
+
+    } catch (error) {
+      console.error("Search failed:", error);
+      resultsDiv.innerHTML = `<p>Error loading reviews. Check console for details.</p>`;
+    }
+  }
+</script>
+</body>
+</html>
