@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | ClearRate</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="modern-layout">
+<header>
+    <h1>Dashboard</h1>
+</header>
+<main>
+    <div class="dashboard-card">
+        <h2 id="welcomeMessage">Welcome!</h2>
+        <div class="stats">
+            <div class="stat">
+                <h3>Total Reviews</h3>
+                <p id="totalReviews">Loading...</p>
+            </div>
+            <div class="stat">
+                <h3>Latest Review</h3>
+                <p id="latestReview">Loading...</p>
+            </div>
+        </div>
+        <button class="cta-button" onclick="location.href='landlord_tenant.html'">Leave a Review</button>
+    </div>
+</main>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCkQZevKbMy_59bCHL8vNa-hiQVMqUUZCc",
+        authDomain: "peoplesearch-7275b.firebaseapp.com",
+        projectId: "peoplesearch-7275b",
+        storageBucket: "peoplesearch-7275b.appspot.com",
+        messagingSenderId: "864963064440",
+        appId: "1:864963064440:web:03f9d767b1da3e9279338d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            console.log('User logged in:', user.email);
+
+            // Display user-specific message
+            const usersRef = collection(db, "users");
+            const userSnap = await getDocs(usersRef);
+            const userData = userSnap.docs.find(doc => doc.id === user.uid)?.data();
+
+            if (userData) {
+                document.getElementById('welcomeMessage').innerText = `Welcome, ${userData.firstName} ${userData.lastName}!`;
+                console.log('User Data:', userData); // Debug log
+            }
+
+            // Fetch total reviews
+            try {
+                const reviewsSnap = await getDocs(collection(db, "reviews_re"));
+                console.log('Total Reviews Snap:', reviewsSnap.size); // Debug log
+                document.getElementById('totalReviews').innerText = reviewsSnap.size;
+            } catch (error) {
+                console.error("Error fetching total reviews:", error);
+                document.getElementById('totalReviews').innerText = "Error loading total reviews";
+            }
+
+            // Fetch latest review
+            try {
+                const latestQuery = query(collection(db, "reviews_re"), orderBy("timestamp", "desc"), limit(1));
+                const latestSnap = await getDocs(latestQuery);
+
+                if (!latestSnap.empty) {
+                    latestSnap.forEach(doc => {
+                        const latest = doc.data();
+                        console.log('Latest Review:', latest); // Debug log
+                        document.getElementById('latestReview').innerText = latest.note.slice(0, 100) + '...';
+                    });
+                } else {
+                    document.getElementById('latestReview').innerText = "No reviews yet.";
+                }
+            } catch (error) {
+                console.error("Error fetching latest review:", error);
+                document.getElementById('latestReview').innerText = "Error loading latest review";
+            }
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+</script>
+
+</body>
+</html>

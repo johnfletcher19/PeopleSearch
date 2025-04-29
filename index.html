@@ -1,51 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Review System Hub</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClearRate - Find Trustworthy Tenants & Landlords</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            margin: 0;
+            font-family: 'Helvetica Neue', sans-serif;
+            background: #f9f9f9;
+            color: #333;
+        }
+        header {
+            background: linear-gradient(to right, #4f46e5, #3b82f6);
             color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2rem;
             text-align: center;
         }
-        h1 {
-            font-size: 2.5rem;
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        nav a {
+            margin-left: 20px;
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 4rem 2rem;
+            flex-wrap: wrap;
+        }
+        .hero-text {
+            max-width: 500px;
+        }
+        .hero-text h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .hero-text p {
+            font-size: 1.2rem;
             margin-bottom: 2rem;
         }
-        .button-group {
-            display: flex;
+        .hero-text button {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+        .hero-image img {
+            max-width: 500px;
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .features {
+            padding: 4rem 2rem;
+            background: #ffffff;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
         }
-        .button-group a {
-            text-decoration: none;
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            background: #00c6ff;
-            color: #fff;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: background 0.3s ease, transform 0.2s ease;
+        .feature-card {
+            background: #f3f4f6;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
         }
-        .button-group a:hover {
-            background: #0072ff;
-            transform: scale(1.05);
+        footer {
+            background: #111827;
+            color: #d1d5db;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
         }
     </style>
 </head>
 <body>
-<h1>🔍 Welcome to the Review System</h1>
-<div class="button-group">
-    <a href="contractor_customer.html">Contractor & Customer</a>
-    <a href="landlord_tenant.html">Landlord & Tenant</a>
-</div>
+<nav>
+    <a href="login.html">Login</a>
+    <a href="register.html">Create Account</a>
+</nav>
+
+<header>
+    <h2>
+        Welcome to ClearRate
+    </h2>
+
+    <p>Trust. Transparency. Tenancy.</p>
+</header>
+
+<section class="hero">
+    <div class="hero-text">
+        <h1>Find or Review Your Next Tenant or Landlord</h1>
+        <p>ClearRate makes it easy to leave honest reviews and find reliable people for your next move. Landlords and tenants can finally share their experiences openly and fairly.</p>
+        <button onclick="window.location.href='register.html'">Get Started</button>
+        <p></p>
+        <button onclick="window.location.href='login.html'">Login</button>
+    </div>
+    <div class="hero-image">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Happy tenant and landlord handshake">
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-card">
+        <h2>Verified Reviews</h2>
+        <p>Every user is verified through email and authentication, ensuring real, honest feedback.</p>
+    </div>
+    <div class="feature-card">
+        <h2>Tenant & Landlord Focused</h2>
+        <p>ClearRate is designed specifically for tenant and landlord experiences - no clutter, no distractions.</p>
+    </div>
+    <div class="feature-card">
+        <h2>Secure & Private</h2>
+        <p>Your personal data is protected with the latest security standards and Firebase Authentication.</p>
+    </div>
+</section>
+
+<footer>
+    &copy; 2025 ClearRate. All rights reserved.
+</footer>
+
 </body>
 </html>

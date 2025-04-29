@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="modern-layout">
+<header>
+    <h1>Login</h1>
+</header>
+<main>
+    <div class="form-card">
+        <input type="email" id="loginEmail" placeholder="Email">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p>
+            <a href="register.html">Create an Account</a> |
+            <a href="#" onclick="sendPasswordResetEmailPrompt()">Forgot Password?</a>
+        </p>
+    </div>
+</main>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCkQZevKbMy_59bCHL8vNa-hiQVMqUUZCc",
+        authDomain: "peoplesearch-7275b.firebaseapp.com",
+        projectId: "peoplesearch-7275b",
+        storageBucket: "peoplesearch-7275b.appspot.com",
+        messagingSenderId: "864963064440",
+        appId: "1:864963064440:web:03f9d767b1da3e9279338d"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    async function login() {
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            window.location.href = "dashboard.html";
+        } catch (error) {
+            alert("Login error: " + error.message);
+        }
+    }
+
+    function sendPasswordResetEmailPrompt() {
+        const email = prompt("Enter your email to reset password:");
+        if (email) {
+            sendPasswordResetEmail(auth, email)
+                .then(() => alert("Password reset email sent."))
+                .catch(error => alert("Error: " + error.message));
+        }
+    }
+
+    window.login = login;
+    window.sendPasswordResetEmailPrompt = sendPasswordResetEmailPrompt;
+</script>
+</body>
+</html>

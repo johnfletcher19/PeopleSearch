@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="modern-layout">
+<header>
+    <h1>Create an Account</h1>
+</header>
+<main>
+    <div class="form-card">
+        <h2>Register</h2>
+        <input type="text" id="firstName" placeholder="First Name">
+        <input type="text" id="lastName" placeholder="Last Name">
+        <select id="role">
+            <option value="">Select Role</option>
+            <option value="landlord">Landlord</option>
+            <option value="tenant">Tenant</option>
+        </select>
+        <input type="email" id="registerEmail" placeholder="Email">
+        <input type="password" id="registerPassword" placeholder="Password">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password">
+        <button onclick="register()">Register</button>
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+</main>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCkQZevKbMy_59bCHL8vNa-hiQVMqUUZCc",
+        authDomain: "peoplesearch-7275b.firebaseapp.com",
+        projectId: "peoplesearch-7275b",
+        storageBucket: "peoplesearch-7275b.appspot.com",
+        messagingSenderId: "864963064440",
+        appId: "1:864963064440:web:03f9d767b1da3e9279338d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    async function register() {
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const role = document.getElementById("role").value;
+        const email = document.getElementById("registerEmail").value.trim();
+        const password = document.getElementById("registerPassword").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (!firstName || !lastName || !role || !email || !password || !confirmPassword) {
+            alert("Please fill out all fields.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const uid = userCredential.user.uid;
+
+            await setDoc(doc(db, "users", uid), {
+                firstName,
+                lastName,
+                role,
+                email
+            });
+
+            alert("Account created successfully! Please verify your email.");
+            await sendEmailVerification(auth.currentUser);
+            window.location.href = "login.html";
+        } catch (error) {
+            alert("Error: " + error.message);
+        }
+    }
+
+    window.register = register;
+</script>
+</body>
+</html>
